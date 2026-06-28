@@ -32,7 +32,8 @@
           "money",
           "shared"
         ],
-        "dockerImage": "ghcr.io/jfilter/ihatemoney:1.0.0"
+        "dockerImage": "ghcr.io/jfilter/ihatemoney:1.0.0",
+        "iconUrl": "https://raw.githubusercontent.com/jfilter/cloudron-ihatemoney/main/logo.png"
       },
       "publishState": "published",
       "ts": "Sun, 28 Jun 2026 10:04:46 GMT"

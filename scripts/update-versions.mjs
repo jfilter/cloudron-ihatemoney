@@ -33,6 +33,10 @@ const entryManifest = { ...manifest, dockerImage };
 for (const key of ["description", "changelog", "postInstallMessage"]) {
   if (manifest[key] !== undefined) entryManifest[key] = inline(manifest[key]);
 }
+// Community-catalog installs require a fetchable iconUrl (served from raw GitHub).
+if (existsSync("logo.png")) {
+  entryManifest.iconUrl = "https://raw.githubusercontent.com/jfilter/cloudron-ihatemoney/main/logo.png";
+}
 
 const catalog = existsSync("CloudronVersions.json")
   ? JSON.parse(readFileSync("CloudronVersions.json", "utf8"))
