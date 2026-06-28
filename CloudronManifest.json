@@ -3,6 +3,7 @@
     "title": "I Hate Money",
     "author": "Johannes Filter",
     "packagerName": "Johannes Filter",
+    "packagerUrl": "https://johannesfilter.com",
     "description": "file://DESCRIPTION.md",
     "changelog": "file://CHANGELOG.md",
     "postInstallMessage": "file://POSTINSTALL.md",
@@ -20,6 +21,9 @@
     "website": "https://ihatemoney.org",
     "documentationUrl": "https://ihatemoney.readthedocs.io",
     "contactEmail": "hi@johannesfilter.com",
+    "mediaLinks": [
+        "https://raw.githubusercontent.com/jfilter/cloudron-ihatemoney/main/screenshot.png"
+    ],
     "memoryLimit": 402653184,
     "tags": [
         "expenses",
