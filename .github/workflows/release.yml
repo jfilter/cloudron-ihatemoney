@@ -1,0 +1,74 @@
+name: release
+
+# Build the IHateMoney image, push it to GHCR (public), update the community
+# version catalog (CloudronVersions.json, served via raw GitHub), and optionally
+# trigger an immediate update of the running app.
+#
+# A release = bump `version` in CloudronManifest.json and `IHATEMONEY_VERSION` in
+# the Dockerfile, commit, then run this workflow (Actions → release → Run workflow).
+# Apps installed via the catalog URL then get an automatic update prompt.
+
+on:
+  workflow_dispatch:
+    inputs:
+      deploy:
+        description: "Also force an immediate cloudron update of the running app?"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write   # commit the updated CloudronVersions.json back to the repo
+  packages: write   # push the image to GHCR
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository_owner }}/ihatemoney
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - id: meta
+        run: |
+          VERSION="$(node -p "require('./CloudronManifest.json').version")"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "image=${REGISTRY}/${IMAGE_NAME}:${VERSION}" >> "$GITHUB_OUTPUT"
+
+      - uses: docker/setup-buildx-action@v3
+
+      - uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: |
+            ${{ steps.meta.outputs.image }}
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+
+      - name: Update version catalog
+        run: node scripts/update-versions.mjs "${{ steps.meta.outputs.image }}"
+
+      - name: Commit catalog
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add CloudronVersions.json
+          git commit -m "release ${{ steps.meta.outputs.version }} (${{ steps.meta.outputs.image }})" \
+            || { echo "no catalog change"; exit 0; }
+          git push
+
+      - name: Deploy (optional)
+        if: ${{ inputs.deploy }}
+        run: |
+          npm install -g cloudron
+          cloudron --server "${{ secrets.CLOUDRON_SERVER }}" \
+                   --token  "${{ secrets.CLOUDRON_TOKEN }}" \
+                   update --app "${{ vars.CLOUDRON_APP }}" \
+                   --image "${{ steps.meta.outputs.image }}"

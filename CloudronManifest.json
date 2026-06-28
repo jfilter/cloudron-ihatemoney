@@ -1,0 +1,30 @@
+{
+    "id": "de.jfilter.ihatemoney",
+    "title": "I Hate Money",
+    "author": "Johannes Filter",
+    "packagerName": "Johannes Filter",
+    "description": "file://DESCRIPTION.md",
+    "changelog": "file://CHANGELOG.md",
+    "postInstallMessage": "file://POSTINSTALL.md",
+    "tagline": "Manage shared expenses, easily",
+    "version": "1.0.0",
+    "healthCheckPath": "/",
+    "httpPort": 8000,
+    "addons": {
+        "localstorage": {},
+        "mysql": {},
+        "sendmail": {}
+    },
+    "manifestVersion": 2,
+    "minBoxVersion": "9.1.0",
+    "website": "https://ihatemoney.org",
+    "documentationUrl": "https://ihatemoney.readthedocs.io",
+    "contactEmail": "hi@johannesfilter.com",
+    "memoryLimit": 402653184,
+    "tags": [
+        "expenses",
+        "budget",
+        "money",
+        "shared"
+    ]
+}

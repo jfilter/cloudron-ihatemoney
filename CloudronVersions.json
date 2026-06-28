@@ -1,0 +1,41 @@
+{
+  "stable": true,
+  "versions": {
+    "1.0.0": {
+      "creationDate": "Sun, 28 Jun 2026 10:04:46 GMT",
+      "manifest": {
+        "id": "de.jfilter.ihatemoney",
+        "title": "I Hate Money",
+        "author": "Johannes Filter",
+        "packagerName": "Johannes Filter",
+        "description": "IHateMoney is a lightweight web application to ease shared budget management\nwithin a group — roommates, friends, family or a trip. It keeps track of who\npaid what, for whom, and helps settle the bills with a minimal, no-nonsense\ninterface. Invited members don't need an account.\n\nThis is a self-maintained Cloudron package wrapping the official upstream\nrelease. The database runs on Cloudron's managed MySQL addon and outbound\ninvitation/reminder mail goes through Cloudron's mail relay. Schema migrations\nare applied automatically on every start, so updating is just a rebuild +\n`cloudron update`.\n\nUpstream project: https://ihatemoney.org",
+        "changelog": "[1.0.0]\n* Cloudron package for IHateMoney (upstream 7.1.1)\n* MySQL + sendmail + localstorage addons; automatic schema migration on start\n* PyMySQL + cryptography for MySQL 8 (caching_sha2_password) auth\n* Per-instance config overrides via /app/data/overrides.cfg\n* Fix fresh-DB migration deadlock on MySQL 8 (close leaked connection in _pre_alembic_db)\n* End-to-end tests: local docker-compose + Cloudron lifecycle, with CI",
+        "postInstallMessage": "Thanks for installing **I Hate Money**!\n\nA few notes:\n\n* The database (MySQL) and outbound mail are wired automatically via Cloudron addons.\n* Schema migrations run automatically on every start — updates are seamless.\n* The **admin dashboard** is enabled only once you place a password hash at\n  `/app/data/admin_password_hash`. Generate one with:\n  `cloudron exec --app <location> -- /app/code/venv/bin/ihatemoney generate_password_hash`\n  then write it into that file and restart. See the README for details.",
+        "tagline": "Manage shared expenses, easily",
+        "version": "1.0.0",
+        "healthCheckPath": "/",
+        "httpPort": 8000,
+        "addons": {
+          "localstorage": {},
+          "mysql": {},
+          "sendmail": {}
+        },
+        "manifestVersion": 2,
+        "minBoxVersion": "9.1.0",
+        "website": "https://ihatemoney.org",
+        "documentationUrl": "https://ihatemoney.readthedocs.io",
+        "contactEmail": "hi@johannesfilter.com",
+        "memoryLimit": 402653184,
+        "tags": [
+          "expenses",
+          "budget",
+          "money",
+          "shared"
+        ],
+        "dockerImage": "ghcr.io/jfilter/ihatemoney:1.0.0"
+      },
+      "publishState": "published",
+      "ts": "Sun, 28 Jun 2026 10:04:46 GMT"
+    }
+  }
+}

@@ -1,0 +1,44 @@
+# Local integration environment for the e2e test: the ihatemoney image (built
+# from the repo Dockerfile) + a MySQL 8 server, with the CLOUDRON_* env vars that
+# Cloudron's addons would otherwise inject. No Cloudron required.
+#
+# Driven by test/local.test.js (npm run test:local). platform is pinned to amd64
+# because cloudron/base is amd64-only (runs emulated on Apple Silicon).
+
+services:
+  mysql:
+    image: mysql:8.0
+    platform: linux/amd64
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpw
+      MYSQL_DATABASE: ihatemoney
+      MYSQL_USER: ihm
+      MYSQL_PASSWORD: ihmpw
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-prootpw"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+
+  app:
+    build:
+      context: ..
+    platform: linux/amd64
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      CLOUDRON_MYSQL_HOST: mysql
+      CLOUDRON_MYSQL_PORT: "3306"
+      CLOUDRON_MYSQL_USERNAME: ihm
+      CLOUDRON_MYSQL_PASSWORD: ihmpw
+      CLOUDRON_MYSQL_DATABASE: ihatemoney
+      # start.sh references these (set -u); dummy values are fine — no mail is
+      # sent during the test.
+      CLOUDRON_MAIL_SMTP_SERVER: mail.invalid
+      CLOUDRON_MAIL_SMTP_PORT: "2525"
+      CLOUDRON_MAIL_SMTP_USERNAME: dummy
+      CLOUDRON_MAIL_SMTP_PASSWORD: dummy
+      CLOUDRON_MAIL_FROM: noreply@example.com
+    ports:
+      - "8000:8000"

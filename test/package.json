@@ -1,0 +1,13 @@
+{
+    "name": "cloudron-ihatemoney-test",
+    "version": "1.0.0",
+    "private": true,
+    "description": "End-to-end lifecycle test for the IHateMoney Cloudron package",
+    "scripts": {
+        "test": "mocha test.js",
+        "test:local": "mocha local.test.js"
+    },
+    "devDependencies": {
+        "mocha": "^10.7.3"
+    }
+}

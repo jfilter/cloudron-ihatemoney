@@ -1,0 +1,14 @@
+# Local migration runbook (host/DB specifics) — keep out of the repo
+MIGRATION.md
+
+# Database dumps — contain real data, never commit
+*.sql
+*.sql.gz
+
+# Node test deps
+node_modules/
+
+# Local secrets / scratch
+secret_key
+admin_password_hash
+*.local
